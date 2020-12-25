@@ -11,10 +11,10 @@ typedef struct _tokenStruct {
         __TOKEN_HT_STRING
     } __htTokenType;
 
-    char* __value
+    char* __value;
 
 } __Token__HT;
 
-__Token__HT* InitHTToken(int __type, char* __value);
+__Token__HT* HTTokenInit(int __type, char* __value);
 
 #endif
