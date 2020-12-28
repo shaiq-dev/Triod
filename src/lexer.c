@@ -3,62 +3,62 @@
 #include <ctype.h>
 
 #include "include/Lexer.h"
-#include "include/Defs.h"
+#include "include/Triod.h"
 
 
-__Lexer__HT* HTLexerInit(char* __con) {
-    __Lexer__HT* __lexer = calloc(1, sizeof(struct _lexerStruct));
-    __lexer->_con = __con;
-    __lexer->_i = 0;
-    __lexer->_c = __con[__lexer->_i];
+HT_Lexer* HTLexerInit(char* con) {
+    HT_Lexer* htlexer = calloc(1, sizeof(struct _lexerStruct));
+    htlexer->_con = con;
+    htlexer->_i = 0;
+    htlexer->_c = con[htlexer->_i];
 
-    return __lexer;
+    return htlexer;
 }
 
-void HTLexerAdvance(__Lexer__HT* __htlexer) {
-    if (__htlexer->_c != __NullChar && __htlexer->_i < strlen(__htlexer->_con)) {
-        __htlexer->_i += 1;
-        __htlexer->_c = __htlexer->_con[__htlexer->_i];
+void HTLexerAdvance(HT_Lexer* htlexer) {
+    if (htlexer->_c != __nullChar && htlexer->_i < strlen(htlexer->_con)) {
+        htlexer->_i += 1;
+        htlexer->_c = htlexer->_con[htlexer->_i];
     }
 }
 
-void HTLexerPassWhiteSpaces(__Lexer__HT* __htlexer) {
-    while (__htlexer->_c == __WhiteSpace || __htlexer->_c == __lexerEncounterBreak) {
-        HTLexerAdvance(__htlexer);
+void HTLexerPassWhiteSpaces(HT_Lexer* htlexer) {
+    while (htlexer->_c == __whiteSpace || htlexer->_c == __newLineBreak) {
+        HTLexerAdvance(htlexer);
     } 
 }
 
-__Token__HT* HTLexerAdvanceWithToken(__Lexer__HT* __htlexer, __Token__HT* __httoken) {
-    HTLexerAdvance(__htlexer);
+HT_Token* HTLexerAdvanceWithToken(HT_Lexer* htlexer, HT_Token* __httoken) {
+    HTLexerAdvance(htlexer);
     return __httoken;
 }
 
-__Token__HT* HTLexerGetNextToken(__Lexer__HT* __htlexer) {
-    while (__htlexer->_c != __NullChar && __htlexer->_i < strlen(__htlexer->_con)) {
+HT_Token* HTLexerGetNextToken(HT_Lexer* htlexer) {
+    while (htlexer->_c != __nullChar && htlexer->_i < strlen(htlexer->_con)) {
         
-        if (__htlexer->_c == __WhiteSpace || __htlexer->_c == __lexerEncounterBreak)
-            HTLexerPassWhiteSpaces(__htlexer);
+        if (htlexer->_c == __whiteSpace || htlexer->_c == __newLineBreak)
+            HTLexerPassWhiteSpaces(htlexer);
 
         // Parse String
-        if (__htlexer->_c == '"')
-            return HTLexerCollectString(__htlexer);
+        if (htlexer->_c == '"')
+            return HTLexerCollectString(htlexer);
 
         // Parse Id
-        if (isalnum(__htlexer->_c))
-            return HTLexerCollectId(__htlexer);
+        if (isalnum(htlexer->_c))
+            return HTLexerCollectId(htlexer);
         
-        switch (__htlexer->_c) {
+        switch (htlexer->_c) {
             case '=' : 
-                return HTLexerAdvanceWithToken(__htlexer, HTTokenInit(__TOKEN_HT_EQUALS, HTLexerGetCurrentCharAsString(__htlexer)));
+                return HTLexerAdvanceWithToken(htlexer, HTTokenInit(HT_TOKEN_EQUALS, HTLexerGetCurrentCharAsString(htlexer)));
                 break;
             case '(' : 
-                return HTLexerAdvanceWithToken(__htlexer, HTTokenInit(__TOKEN_HT_LPAREN, HTLexerGetCurrentCharAsString(__htlexer)));
+                return HTLexerAdvanceWithToken(htlexer, HTTokenInit(HT_TOKEN_LPAREN, HTLexerGetCurrentCharAsString(htlexer)));
                 break;
             case ')' : 
-                return HTLexerAdvanceWithToken(__htlexer, HTTokenInit(__TOKEN_HT_RPAREN, HTLexerGetCurrentCharAsString(__htlexer)));
+                return HTLexerAdvanceWithToken(htlexer, HTTokenInit(HT_TOKEN_RPAREN, HTLexerGetCurrentCharAsString(htlexer)));
                 break;
             case ';' : 
-                return HTLexerAdvanceWithToken(__htlexer, HTTokenInit(__TOKEN_HT_SEMICOLON, HTLexerGetCurrentCharAsString(__htlexer)));
+                return HTLexerAdvanceWithToken(htlexer, HTTokenInit(HT_TOKEN_SEMICOLON, HTLexerGetCurrentCharAsString(htlexer)));
                 break;
 
         }
@@ -67,45 +67,45 @@ __Token__HT* HTLexerGetNextToken(__Lexer__HT* __htlexer) {
     return (void*)0;
 }
 
-__Token__HT* HTLexerCollectId(__Lexer__HT* __htlexer) {
+HT_Token* HTLexerCollectId(HT_Lexer* htlexer) {
 
-    char* __val = calloc(1, sizeof(char));
-    __val[0] = __NullChar;
+    char* _val = calloc(1, sizeof(char));
+    _val[0] = __nullChar;
 
-    while(isalnum(__htlexer->_c)) {
-        char* _cur = HTLexerGetCurrentCharAsString(__htlexer);
-        __val = realloc(__val, (strlen(__val) + strlen(_cur) + 1) * sizeof(char));
-        strcat(__val, _cur);
+    while(isalnum(htlexer->_c)) {
+        char* _cur = HTLexerGetCurrentCharAsString(htlexer);
+        _val = realloc(_val, (strlen(_val) + strlen(_cur) + 1) * sizeof(char));
+        strcat(_val, _cur);
 
-        HTLexerAdvance(__htlexer);
+        HTLexerAdvance(htlexer);
     }
     
-    return HTTokenInit(__TOKEN_HT_ID, __val);
+    return HTTokenInit(HT_TOKEN_ID, _val);
 }
 
-__Token__HT* HTLexerCollectString(__Lexer__HT* __htlexer) {
+HT_Token* HTLexerCollectString(HT_Lexer* htlexer) {
     // Skip the first quote
-    HTLexerAdvance(__htlexer);
-    char* __strVal = calloc(1, sizeof(char));
-    __strVal[0] = __NullChar;
+    HTLexerAdvance(htlexer);
+    char* _strVal = calloc(1, sizeof(char));
+    _strVal[0] = __nullChar;
 
-    while(__htlexer->_c != '"') {
-        char* _cur = HTLexerGetCurrentCharAsString(__htlexer);
-        __strVal = realloc(__strVal, (strlen(__strVal) + strlen(_cur) + 1) * sizeof(char));
-        strcat(__strVal, _cur);
+    while(htlexer->_c != '"') {
+        char* _cur = HTLexerGetCurrentCharAsString(htlexer);
+        _strVal = realloc(_strVal, (strlen(_strVal) + strlen(_cur) + 1) * sizeof(char));
+        strcat(_strVal, _cur);
 
-        HTLexerAdvance(__htlexer);
+        HTLexerAdvance(htlexer);
     }
     // Skip last quote
-    HTLexerAdvance(__htlexer);
+    HTLexerAdvance(htlexer);
 
-    return HTTokenInit(__TOKEN_HT_STRING, __strVal);
+    return HTTokenInit(HT_TOKEN_STRING, _strVal);
 }
 
-char* HTLexerGetCurrentCharAsString(__Lexer__HT* __htlexer) {
-    char* __str = calloc(2, sizeof(char));
-    __str[0] = __htlexer->_c;
-    __str[1] = __NullChar;
+char* HTLexerGetCurrentCharAsString(HT_Lexer* htlexer) {
+    char* _str = calloc(2, sizeof(char));
+    _str[0] = htlexer->_c;
+    _str[1] = __nullChar;
 
-    return __str;
+    return _str;
 }

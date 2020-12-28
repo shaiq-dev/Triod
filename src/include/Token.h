@@ -1,20 +1,20 @@
-#ifndef TOKEN_HT
-#define TOKEN_HT
+#ifndef HT_TOKEN_H
+#define HT_TOKEN_H
 
 typedef struct _tokenStruct {
     enum {
-        __TOKEN_HT_ID,
-        __TOKEN_HT_EQUALS,
-        __TOKEN_HT_LPAREN,
-        __TOKEN_HT_RPAREN,
-        __TOKEN_HT_SEMICOLON,
-        __TOKEN_HT_STRING
-    } __htTokenType;
+        HT_TOKEN_ID,
+        HT_TOKEN_EQUALS,
+        HT_TOKEN_LPAREN,
+        HT_TOKEN_RPAREN,
+        HT_TOKEN_SEMICOLON,
+        HT_TOKEN_STRING
+    } _htTokenType;
 
-    char* __value;
+    char* _value;
 
-} __Token__HT;
+} HT_Token;
 
-__Token__HT* HTTokenInit(int __type, char* __value);
+HT_Token* HTTokenInit(int type, char* value);
 
 #endif

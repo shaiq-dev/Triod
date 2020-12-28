@@ -1,5 +1,5 @@
-#ifndef LEXER_HT
-#define LEXER_HT
+#ifndef HT_LEXER_H
+#define HT_LEXER_H
 
 #include "Token.h"
 
@@ -7,22 +7,22 @@ typedef struct _lexerStruct {
     char _c;
     unsigned int _i;
     char* _con;
-} __Lexer__HT;
+} HT_Lexer;
 
-__Lexer__HT* HTLexerInit(char* __con);
+HT_Lexer* HTLexerInit(char* con);
 
-void HTLexerAdvance(__Lexer__HT* __htlexer);
+void HTLexerAdvance(HT_Lexer* htlexer);
 
-void HTLexerPassWhiteSpaces(__Lexer__HT* __htlexer);
+void HTLexerPassWhiteSpaces(HT_Lexer* htlexer);
 
-__Token__HT* HTLexerGetNextToken(__Lexer__HT* __htlexer);
+HT_Token* HTLexerGetNextToken(HT_Lexer* htlexer);
 
-__Token__HT* HTLexerCollectString(__Lexer__HT* __htlexer);
+HT_Token* HTLexerCollectString(HT_Lexer* htlexer);
 
-__Token__HT* HTLexerCollectId(__Lexer__HT* __htlexer);
+HT_Token* HTLexerCollectId(HT_Lexer* htlexer);
 
-char* HTLexerGetCurrentCharAsString(__Lexer__HT* __htlexer);
+char* HTLexerGetCurrentCharAsString(HT_Lexer* htlexer);
 
-__Token__HT* HTLexerAdvanceWithToken(__Lexer__HT* __htlexer, __Token__HT* __httoken);
+HT_Token* HTLexerAdvanceWithToken(HT_Lexer* htlexer, HT_Token* httoken);
 
 #endif
