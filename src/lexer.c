@@ -3,6 +3,7 @@
 #include <ctype.h>
 
 #include "include/Lexer.h"
+#include "include/Token.h"
 #include "include/Triod.h"
 
 

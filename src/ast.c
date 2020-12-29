@@ -12,8 +12,10 @@ HT_AST* HTAstInit(int type) {
     htast->_varName = __voidNull;
     htast->_functionCallName = __voidNull;
     htast->_functionCallArgs = __voidNull;
-    htast->_functionCallArgsSize = __voidNull;
+    htast->_functionCallArgsSize = 0;
     htast->_stringValue = __voidNull;
+    htast->_compoundStValue = __voidNull;
+    htast->_compoundStSize = 0;
 
     return htast;
 }

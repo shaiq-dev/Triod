@@ -3,13 +3,14 @@
 
 #include <stdlib.h>
 
-typedef struct _astSruct
+typedef struct _astStruct
 {
     enum {
         HT_AST_VAR_DEF,
         HT_AST_VAR,
         HT_AST_FUNCTION_CALL,
-        HT_AST_STRING
+        HT_AST_STRING,
+        HT_AST_COMPOUND_ST
     } _type;
 
     // Variable Definations
@@ -23,6 +24,9 @@ typedef struct _astSruct
     size_t _functionCallArgsSize;
     // String
     char* _stringValue;
+    // Compound Source Tree
+    struct _astStruct** _compoundStValue;
+    size_t _compoundStSize;
 
 } HT_AST;
 
